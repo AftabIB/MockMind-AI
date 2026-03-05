@@ -1,0 +1,539 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #09090f;
+  --surface: #12121a;
+  --surface2: #18182a;
+  --border: #1e1e30;
+  --border-hover: #2e2e4a;
+  --accent: #7c3aed;
+  --accent2: #06b6d4;
+  --accent3: #f59e0b;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --correct: #10b981;
+  --wrong: #ef4444;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--bg);
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ──── Animated background grid ──── */
+.bg-grid {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 58, 237, 0.08), transparent),
+    linear-gradient(rgba(124, 58, 237, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
+}
+
+/* ──── Glow effects ──── */
+.glow-purple {
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.2), 0 0 80px rgba(124, 58, 237, 0.06);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 40px rgba(6, 182, 212, 0.2), 0 0 80px rgba(6, 182, 212, 0.06);
+}
+
+.glow-amber {
+  box-shadow: 0 0 40px rgba(245, 158, 11, 0.2), 0 0 80px rgba(245, 158, 11, 0.06);
+}
+
+/* ──── Animated gradient border (follows rounded corners) ──── */
+.border-animated {
+  position: relative;
+  overflow: hidden;
+}
+
+.border-animated::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, #7c3aed, #06b6d4, #f59e0b, #7c3aed);
+  background-size: 300% 300%;
+  animation: borderMove 5s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes borderMove {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ──── Glass surface ──── */
+.glass {
+  background: rgba(18, 18, 26, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ──── Pulse dot ──── */
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--correct);
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.4);
+  }
+}
+
+/* ──── Progress bar ──── */
+.progress-bar {
+  height: 5px;
+  background: linear-gradient(90deg, #7c3aed, #a855f7, #06b6d4);
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
+}
+
+/* ──── Option cards ──── */
+.option-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.option-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.06), transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.option-card:hover:not(.disabled) {
+  border-color: rgba(124, 58, 237, 0.5);
+  background: rgba(124, 58, 237, 0.06);
+  transform: translateX(6px);
+}
+
+.option-card:hover:not(.disabled)::before {
+  opacity: 1;
+}
+
+.option-card.selected {
+  border-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.15);
+}
+
+.option-card.correct {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.12);
+}
+
+.option-card.wrong {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.12);
+}
+
+.option-card.disabled {
+  cursor: not-allowed;
+}
+
+/* ──── Shimmer loader ──── */
+.shimmer {
+  background: linear-gradient(90deg, var(--surface) 25%, rgba(124, 58, 237, 0.08) 50%, var(--surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ──── Theory card (glass surface) ──── */
+.theory-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  line-height: 1.8;
+  transition: border-color 0.2s ease;
+}
+
+.theory-card:hover {
+  border-color: var(--border-hover);
+}
+
+/* ──── Fade slide in ──── */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeSlideIn 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ──── Stagger children ──── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ──── Score ring ──── */
+.score-ring {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* ──── Badges ──── */
+.badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.badge-easy {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.badge-medium {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.badge-hard {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* ──── Level tag ──── */
+.level-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 6px;
+}
+
+/* ──── Buttons ──── */
+.btn-primary {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(124, 58, 237, 0.35);
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: #a78bfa;
+  background: rgba(124, 58, 237, 0.06);
+}
+
+/* ──── Scrollbar ──── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7c3aed;
+}
+
+/* ──── Markdown styles inside theory ──── */
+.theory-content h1,
+.theory-content h2,
+.theory-content h3 {
+  color: #c4b5fd;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.theory-content h1 {
+  font-size: 1.5rem;
+  margin: 24px 0 12px;
+}
+
+.theory-content h2 {
+  font-size: 1.25rem;
+  margin: 20px 0 10px;
+  border-bottom: 1px solid rgba(124, 58, 237, 0.15);
+  padding-bottom: 8px;
+}
+
+.theory-content h3 {
+  font-size: 1.1rem;
+  margin: 16px 0 8px;
+}
+
+.theory-content p {
+  margin-bottom: 12px;
+  color: #cbd5e1;
+  line-height: 1.85;
+}
+
+.theory-content ul,
+.theory-content ol {
+  padding-left: 24px;
+  margin-bottom: 12px;
+}
+
+.theory-content li {
+  margin-bottom: 6px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.theory-content li::marker {
+  color: #7c3aed;
+}
+
+.theory-content code {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(124, 58, 237, 0.12);
+  color: #c4b5fd;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 0.86em;
+  border: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+.theory-content pre {
+  background: #0c0c18;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.theory-content pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  color: #e2e8f0;
+  font-size: 0.85em;
+  line-height: 1.45;
+  white-space: pre;
+}
+
+.theory-content strong {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+.theory-content em {
+  color: #a5b4fc;
+}
+
+.theory-content blockquote {
+  border-left: 3px solid #7c3aed;
+  padding: 8px 16px;
+  color: #94a3b8;
+  margin: 12px 0;
+  background: rgba(124, 58, 237, 0.04);
+  border-radius: 0 8px 8px 0;
+}
+
+/* ──── Input focus ring ──── */
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  border-color: rgba(124, 58, 237, 0.6) !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+/* ──── Theory Scroll Container ──── */
+.theory-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.theory-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.theory-scroll::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.25);
+  border-radius: 3px;
+}
+
+.theory-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.5);
+}
+
+/* ──── Quiz Scroll Container ──── */
+.quiz-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.quiz-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.quiz-scroll::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.2);
+  border-radius: 3px;
+}
+
+.quiz-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.4);
+}
+
+/* ──── Option card compact ──── */
+.option-card {
+  padding: 12px 16px;
+}
+
+/* ──── Accessibility: respect prefers-reduced-motion ──── */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

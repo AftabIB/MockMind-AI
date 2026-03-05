@@ -13,7 +13,7 @@ An AI-powered adaptive mock test platform that generates theory content and quiz
 
 ## Tech Stack
 
-- **Frontend:** Next.js 14, React 18, Tailwind CSS
+- **Frontend:** Next.js, Tailwind CSS
 - **AI Model:** Google Gemma 3 27B IT (via Google AI Studio)
 - **SDK:** `@google/genai`
 
@@ -44,26 +44,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── api/
-│   │   ├── theory/route.js    # Theory generation API
-│   │   └── questions/route.js # Batch question generation API
-│   ├── globals.css            # Design system & styles
-│   ├── layout.jsx             # Root layout
-│   └── page.jsx               # Main app (state management)
-├── components/
-│   ├── LandingScreen.jsx      # Topic selection
-│   ├── TheoryScreen.jsx       # AI-generated theory display
-│   ├── QuizScreen.jsx         # Quiz with batch-loaded questions
-│   ├── LevelUpScreen.jsx      # Level completion & promotion
-│   └── ScorecardScreen.jsx    # Final results & grading
-└── lib/
-    └── gemini.js              # Gemma 3 27B AI client & utilities
-```
 
 ## API Usage
 

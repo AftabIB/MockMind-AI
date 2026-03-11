@@ -537,3 +537,331 @@ textarea:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ──── MOBILE RESPONSIVE STYLES ──── */
+
+/* ── Small phones (< 480px) ── */
+@media (max-width: 480px) {
+  html, body {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  /* General layout fixes */
+  .h-screen, .min-h-screen {
+    height: auto !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    overflow: visible !important;
+  }
+
+  /* ── Landing Screen ── */
+  .h-screen.flex.flex-col.items-center.justify-center {
+    justify-content: flex-start !important;
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+  }
+
+  .btn-primary {
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 10px;
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .btn-secondary {
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 10px;
+    min-height: 44px;
+  }
+
+  /* Topic chips - smaller on mobile */
+  .flex.flex-wrap.gap-1\.5 button,
+  .flex.flex-wrap.gap-2 button {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .flex.flex-wrap.justify-center.gap-2 {
+    gap: 4px;
+  }
+
+  .flex.flex-wrap.justify-center.gap-2 > div {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  .grid.grid-cols-3 {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .border-animated {
+    padding: 16px !important;
+  }
+
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  /* ── Theory Screen ── */
+  .theory-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .theory-content h1 { font-size: 1.2rem; }
+  .theory-content h2 { font-size: 1.05rem; }
+  .theory-content h3 { font-size: 0.95rem; }
+  .theory-content p { font-size: 0.85rem; line-height: 1.7; }
+  .theory-content li { font-size: 0.85rem; }
+
+  .theory-content pre {
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .theory-content pre code {
+    font-size: 0.75em;
+  }
+
+  /* Theory quiz start bar */
+  .flex.items-center.justify-between.p-3 {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .flex.items-center.justify-between.p-3 .btn-primary {
+    width: 100%;
+  }
+
+  /* ── Quiz Screen ── */
+  .quiz-container {
+    padding: 12px 12px !important;
+    overflow-y: auto !important;
+  }
+
+  .quiz-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start !important;
+  }
+
+  .quiz-topic-label {
+    display: none;
+  }
+
+  .quiz-status-row {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start !important;
+  }
+
+  .quiz-question-card {
+    padding: 14px !important;
+  }
+
+  .option-card {
+    padding: 10px 12px !important;
+    border-radius: 10px !important;
+  }
+
+  .option-card .option-letter {
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+  }
+
+  .quiz-action-row {
+    justify-content: stretch !important;
+  }
+
+  .quiz-submit-btn {
+    width: 100% !important;
+    justify-content: center;
+  }
+
+  .adaptive-path {
+    gap: 2px !important;
+  }
+
+  .adaptive-path > div > div:first-child {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 8px !important;
+  }
+
+  /* ── LevelUp Screen ── */
+  .grid.grid-cols-3.gap-3 {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .grid.grid-cols-3.gap-3 .theory-card {
+    padding: 10px 6px !important;
+  }
+
+  .grid.grid-cols-3.gap-3 .text-2xl {
+    font-size: 1.25rem !important;
+  }
+
+  .relative.w-36.h-36 {
+    width: 110px !important;
+    height: 110px !important;
+  }
+
+  .relative.w-36.h-36 svg {
+    width: 110px !important;
+    height: 110px !important;
+  }
+
+  .relative.w-36.h-36 .text-3xl {
+    font-size: 1.5rem !important;
+  }
+
+  /* Level up buttons */
+  .flex.gap-3 {
+    flex-direction: column;
+  }
+
+  /* ── Scorecard Screen ── */
+  .flex.items-center.justify-center.gap-5 {
+    gap: 16px;
+  }
+
+  .text-5xl {
+    font-size: 2.5rem !important;
+  }
+
+  .text-4xl {
+    font-size: 2rem !important;
+  }
+
+  /* Feedback + stars row */
+  .flex.items-center.gap-3:has(.flex-1.p-3) {
+    flex-direction: column;
+  }
+
+  /* Badge sizing */
+  .badge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+}
+
+/* ── Medium phones / small tablets (481px - 768px) ── */
+@media (min-width: 481px) and (max-width: 768px) {
+  html, body {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .h-screen, .min-h-screen {
+    height: auto !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    overflow: visible !important;
+  }
+
+  .btn-primary {
+    padding: 12px 24px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  .btn-secondary {
+    padding: 12px 24px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  .theory-card {
+    padding: 20px;
+  }
+
+  .option-card {
+    padding: 12px 14px !important;
+  }
+
+  .quiz-container {
+    padding: 14px !important;
+  }
+
+  .quiz-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .grid.grid-cols-3 {
+    gap: 10px !important;
+  }
+
+  /* Theory quiz start bar */
+  .flex.items-center.justify-between.p-3 {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .flex.items-center.justify-between.p-3 .btn-primary {
+    width: 100%;
+  }
+}
+
+/* ── Tablets (769px - 1024px) ── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .theory-card {
+    padding: 22px;
+  }
+
+  .option-card {
+    padding: 14px 16px !important;
+  }
+}
+
+/* ── Touch device optimizations ── */
+@media (hover: none) and (pointer: coarse) {
+  .option-card:hover:not(.disabled) {
+    transform: none;
+    border-color: var(--border);
+    background: var(--surface);
+  }
+
+  .option-card:hover:not(.disabled)::before {
+    opacity: 0;
+  }
+
+  .option-card.selected {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.1);
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.15);
+  }
+
+  .btn-primary:hover {
+    transform: none;
+  }
+
+  /* Larger touch targets */
+  .option-card {
+    min-height: 48px;
+  }
+
+  .btn-primary, .btn-secondary {
+    min-height: 48px;
+  }
+}
+
+/* ── Safe area for notched devices ── */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .quiz-action-row,
+  .quiz-container {
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+}

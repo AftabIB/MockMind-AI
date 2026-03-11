@@ -41,7 +41,7 @@ export default function TheoryScreen({ topic, level, onDone }) {
 
   const meta = LEVEL_META[level];
 
-  const fetchTheory = async () => {
+  const fetchTheory = async (signal) => {
     setLoading(true);
     setError('');
     setTheory('');
@@ -50,18 +50,24 @@ export default function TheoryScreen({ topic, level, onDone }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic, level }),
+        signal,
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       setTheory(data.theory);
     } catch (err) {
+      if (err.name === 'AbortError') return; // Ignore aborted requests
       setError(err.message || 'Failed to load theory');
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) setLoading(false);
     }
   };
 
-  useEffect(() => { fetchTheory(); }, [topic, level]);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchTheory(controller.signal);
+    return () => controller.abort();
+  }, [topic, level]);
 
   return (
     <div className="h-screen flex flex-col px-4 py-4 animate-in overflow-hidden">
@@ -158,12 +164,12 @@ export default function TheoryScreen({ topic, level, onDone }) {
         </div>
 
         {!loading && !error && theory && (
-          <div className="flex items-center justify-between p-3 bg-purple-600/10 border border-purple-500/20 rounded-xl animate-in mt-2 shrink-0">
-            <div>
+          <div className="flex flex-col sm:flex-row items-center justify-between p-3 gap-3 bg-purple-600/10 border border-purple-500/20 rounded-xl animate-in mt-2 shrink-0">
+            <div className="text-center sm:text-left">
               <p className="text-slate-300 text-sm font-semibold">Ready to test your knowledge?</p>
               <p className="text-slate-500 text-xs font-code mt-0.5">5 adaptive questions • difficulty adjusts per answer</p>
             </div>
-            <button onClick={() => onDone(theory)} className="btn-primary flex items-center gap-2 whitespace-nowrap py-3 px-6">
+            <button onClick={() => onDone(theory)} className="btn-primary flex items-center justify-center gap-2 whitespace-nowrap py-3 px-6 w-full sm:w-auto">
               Start Quiz <ChevronRight className="w-4 h-4" />
             </button>
           </div>

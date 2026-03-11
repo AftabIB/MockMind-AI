@@ -82,7 +82,7 @@ export default function LevelUpScreen({ topic, currentLevel, score, onDecide }) 
               </p>
             </div>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => onDecide(true)}
               className="btn-primary flex-1 flex items-center justify-center gap-2"

@@ -17,7 +17,14 @@ const WORD_BUDGET = { 1: 800, 2: 1000, 3: 1200 };
 
 export async function POST(request) {
   try {
-    const { topic, level } = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      // Request was aborted (AbortController) — body is incomplete
+      return NextResponse.json({ error: 'Request aborted' }, { status: 499 });
+    }
+    const { topic, level } = body;
 
     if (!topic || !level) {
       return NextResponse.json({ error: 'Missing topic or level' }, { status: 400 });

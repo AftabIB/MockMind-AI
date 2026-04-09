@@ -33,6 +33,6 @@ export async function POST() {
     const count = await redis(['INCR', 'visitor_count']);
     return NextResponse.json({ count: parseInt(count) || 0 });
   } catch {
-w    return NextResponse.json({ count: 0 });
+    return NextResponse.json({ count: 0 });
   }
 }

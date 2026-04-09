@@ -1,35 +1,38 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 
-const DATA_FILE = path.join(process.cwd(), 'visitors.json');
+const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL;
+const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 
-function getVisitorData() {
-  try {
-    if (fs.existsSync(DATA_FILE)) {
-      const raw = fs.readFileSync(DATA_FILE, 'utf-8');
-      return JSON.parse(raw);
-    }
-  } catch (e) {
-    // If file is corrupted, reset
-  }
-  return { count: 0 };
-}
-
-function saveVisitorData(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+// Helper to run Upstash Redis commands via REST API (no npm package needed)
+async function redis(command) {
+  const res = await fetch(`${UPSTASH_URL}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${UPSTASH_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(command),
+  });
+  const data = await res.json();
+  return data.result;
 }
 
 // GET - return current visitor count
 export async function GET() {
-  const data = getVisitorData();
-  return NextResponse.json({ count: data.count });
+  try {
+    const count = await redis(['GET', 'visitor_count']);
+    return NextResponse.json({ count: parseInt(count) || 0 });
+  } catch {
+    return NextResponse.json({ count: 0 });
+  }
 }
 
 // POST - increment visitor count and return new value
 export async function POST() {
-  const data = getVisitorData();
-  data.count += 1;
-  saveVisitorData(data);
-  return NextResponse.json({ count: data.count });
+  try {
+    const count = await redis(['INCR', 'visitor_count']);
+    return NextResponse.json({ count: parseInt(count) || 0 });
+  } catch {
+w    return NextResponse.json({ count: 0 });
+  }
 }

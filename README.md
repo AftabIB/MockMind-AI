@@ -4,6 +4,7 @@
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)
 ![Gemma 3](https://img.shields.io/badge/Gemma_3-27B_IT-blue?logo=google)
+![Upstash](https://img.shields.io/badge/Upstash-Redis-00e9a3?logo=redis)
 
 ---
 
@@ -45,6 +46,7 @@
 | **Framework** | Next.js | Full-stack React framework |
 | **AI Model** | Gemma 3 27B IT | Theory + question generation |
 | **AI SDK** | `@google/genai` | Google AI Studio client |
+| **Database** | Upstash Redis | Visitor counter (serverless-compatible) |
 | **Styling** | Tailwind CSS + Vanilla CSS | Utility classes + custom design system |
 | **Icons** | `lucide-react` | Consistent icon set |
 | **Fonts** | Inter + JetBrains Mono | UI + code typography |
@@ -53,19 +55,27 @@
 
 ## 🚀 Getting Started
 
-### 1. Get a free API key
+### 1. Get a free Gemini API key
 
 Visit [Google AI Studio](https://aistudio.google.com/app/apikey) and create a free API key.
 
-### 2. Clone & set up environment
+### 2. Set up Upstash Redis (for visitor counter)
+
+1. Go to [console.upstash.com](https://console.upstash.com) → Create a free account
+2. Create a new Redis database (free tier: 500K commands/month)
+3. Copy the **REST URL** and **REST Token** from the dashboard
+
+### 3. Clone & set up environment
 
 Create a `.env.local` file in the root directory:
 
 ```
 GEMINI_API_KEY=your_api_key_here
+UPSTASH_REDIS_REST_URL=your_upstash_rest_url_here
+UPSTASH_REDIS_REST_TOKEN=your_upstash_rest_token_here
 ```
 
-### 3. Install & run
+### 4. Install & run
 
 ```bash
 npm install

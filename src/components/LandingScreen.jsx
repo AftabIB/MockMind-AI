@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Brain, Zap, Target, TrendingUp, ChevronRight, Code2 } from 'lucide-react';
+import VisitorCounter from './VisitorCounter';
 
 const POPULAR_TOPICS = [
   { name: 'Python', icon: '🐍', color: '#3b82f6' },
@@ -150,10 +151,14 @@ export default function LandingScreen({ onStart }) {
       </div>
 
       {/* Footer */}
-      <p className="text-[11px] text-slate-500 font-code mt-3">
-        {' Built by '}
-        <span className="text-purple-400 font-medium">Aftab</span>
-      </p>
+      <div className="flex items-center gap-3 mt-3">
+        <p className="text-[11px] text-slate-500 font-code">
+          {' Built by '}
+          <span className="text-purple-400 font-medium">Aftab</span>
+        </p>
+        <span className="text-slate-700">•</span>
+        <VisitorCounter />
+      </div>
     </div>
   );
 }

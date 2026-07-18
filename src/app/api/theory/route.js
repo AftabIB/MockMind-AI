@@ -9,7 +9,7 @@ const LEVEL_DESC = {
   3: 'advanced concepts, performance optimization, design patterns, internals, edge cases, and expert-level topics',
 };
 
-// Word budget for theory generation (Gemma 3 27B — max 8192 output tokens per call):
+// Word budget for theory generation (Gemma 4 31B — max 8192 output tokens per call):
 // ~1000 words ≈ ~1500 tokens output, prompt ≈ ~300 tokens → ~1,800 tokens per theory call
 // 3 levels × 1,800 = ~5,400 tokens for all theory
 // Per session with 5 questions/level: theory ~5,400 + questions ~5,000 = ~10,400 tokens total

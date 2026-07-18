@@ -140,7 +140,7 @@ export default function ScorecardScreen({ topic, levelScores, onRestart }) {
           <RotateCcw className="w-4 h-4" /> Try Another Topic
         </button>
         <p className="text-center text-[10px] text-slate-600 font-code">
-          MockMind AI • Powered by Gemma 3
+          MockMind AI • Powered by Gemma 4
         </p>
       </div>
     </div>

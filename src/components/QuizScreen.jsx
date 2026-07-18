@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { CheckCircle, XCircle, AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
+import LoadingExperience from './LoadingExperience';
 
 const LEVEL_META = {
   1: { name: 'Beginner', icon: '🌱', badge: 'badge-easy' },
@@ -187,10 +188,8 @@ export default function QuizScreen({ topic, level, theoryText, askedQuestions, o
       {/* Question card */}
       <div className="w-full max-w-4xl flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden quiz-scroll">
         {loading && (
-          <div className="theory-card flex flex-col items-center justify-center py-12">
-            <Loader2 className="w-7 h-7 text-purple-400 animate-spin mb-2" />
-            <p className="text-slate-400 text-sm font-code">Generating adaptive questions...</p>
-            <p className="text-slate-600 text-xs font-code mt-1">This may take a moment</p>
+          <div className="theory-card flex-1 flex flex-col min-h-0">
+            <LoadingExperience topic={topic} type="quiz" />
           </div>
         )}
 

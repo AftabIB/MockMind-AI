@@ -1,21 +1,22 @@
 import { GoogleGenAI } from '@google/genai';
 
 // ─── Model Configuration ────────────────────────────────────────────────────
-// Using Gemma 3 27B IT (Instruction Tuned) via Google AI Studio
-// Gemma 3 27B is Google's open-weight model, free on AI Studio.
+// Using Gemma 4 31B IT (Instruction Tuned) via Google AI Studio
+// Gemma 4 31B is Google's latest open-weight model, free on AI Studio.
 //
 // Key specs:
-//   Context Window:  128K tokens
+//   Context Window:  256K tokens
 //   Max Output:      8,192 tokens
 //   Multimodal:      Text + Image input, Text output
 //   Languages:       140+
+//   Native Function Calling: Supported
 //   Structured Output: Supported (JSON mode + responseSchema)
 //
 // Free tier rate limits (approximate — may vary):
 //   RPM  (Requests Per Minute):  ~10-15
 //   RPD  (Requests Per Day):     ~250-500
 //   TPM  (Tokens Per Minute):    Varies (RESOURCE_EXHAUSTED if exceeded)
-export const MODEL_ID = 'gemma-3-27b-it';
+export const MODEL_ID = 'gemma-4-31b-it';
 
 // ─── Singleton AI Client ────────────────────────────────────────────────────
 let _ai = null;
@@ -27,25 +28,26 @@ export function getAI() {
 }
 
 // ─── Token Budget System ────────────────────────────────────────────────────
-// We conservatively budget tokens to stay within Gemma 3 27B free tier limits.
+// We conservatively budget tokens to stay within Gemma 4 31B free tier limits.
 //
-// Gemma 3 27B free tier on Google AI Studio:
-//   Context: 128K, Max output: 8,192 tokens per call
+// Gemma 4 31B free tier on Google AI Studio:
+//   Context: 256K, Max output: 8,192 tokens per call
 //   RPM: ~10-15, RPD: ~250-500
 //
-// Per full test session (3 levels × theory + questions batch):
+// Per full test session (3 levels × theory + questions batch + interesting fact):
 //   Theory:    ~4,000 tokens per call × 3 levels  = ~12,000 tokens (3 API calls)
 //   Questions: ~3,000 tokens per batch × 3 levels  = ~9,000 tokens  (3 API calls)
-//   Total per session: ~21,000 tokens, 6 API calls
+//   Fact:      ~500 tokens per call                = ~500 tokens    (1 API call)
+//   Total per session: ~21,500 tokens, 7 API calls
 //
 // Rate usage per session:
-//   RPM:  6 calls spread across ~15-20 min → ~0.4 RPM (well under 10-15 limit)
-//   RPD:  6 calls per session → ~41-83 sessions/day within 250-500 limit
-//   TPM:  ~21K tokens spread across ~15-20 min → ~1.4K TPM (well under limit)
+//   RPM:  7 calls spread across ~15-20 min → ~0.5 RPM (well under 10-15 limit)
+//   RPD:  7 calls per session → ~35-71 sessions/day within 250-500 limit
+//   TPM:  ~21.5K tokens spread across ~15-20 min → ~1.4K TPM (well under limit)
 //
 // We track per-session usage and enforce a hard cap.
 
-const SESSION_TOKEN_BUDGET = 150_000; // conservative budget for Gemma 3 27B
+const SESSION_TOKEN_BUDGET = 150_000; // conservative budget for Gemma 4 31B
 const sessionTokenUsage = new Map(); // sessionId -> { used, lastReset }
 
 export function getSessionId() {
@@ -94,14 +96,14 @@ export async function generateWithBudget({ prompt, systemInstruction, maxOutputT
     if (isOverBudget(sid)) {
         throw new Error(
             'Token budget exceeded for this minute. Please wait ~60 seconds and try again. ' +
-            'Gemma 3 27B free tier rate limit may have been reached.'
+            'Gemma 4 31B free tier rate limit may have been reached.'
         );
     }
 
     const remaining = getRemainingTokens(sid);
     // Cap output tokens to not exceed budget (rough estimate: prompt is ~10% of remaining)
     const effectiveMaxTokens = Math.min(
-        maxOutputTokens || 8192, // Gemma 3 27B max output: 8192 tokens
+        maxOutputTokens || 8192, // Gemma 4 31B max output: 8192 tokens
         Math.floor(remaining * 0.8) // leave 20% headroom for prompt tokens
     );
 
@@ -113,7 +115,7 @@ export async function generateWithBudget({ prompt, systemInstruction, maxOutputT
 
     const config = {
         maxOutputTokens: effectiveMaxTokens,
-        temperature: 0.4, // Slightly higher temp for Gemma 3 — balances quality & creativity
+        temperature: 0.4, // Balanced temp for Gemma 4 — quality & creativity
     };
 
     // prepend the system instruction directly into the prompt.
@@ -236,7 +238,7 @@ export async function generateJSONWithBudget({ prompt, systemInstruction, respon
 
     const config = {
         maxOutputTokens: effectiveMaxTokens,
-        temperature: 0.3, // Slightly higher for Gemma 3 to maintain output quality
+        temperature: 0.3, // Tuned for Gemma 4 to maintain output quality
     };
 
     // Build a JSON schema hint for the prompt so the model knows the expected format
@@ -261,28 +263,28 @@ export async function generateJSONWithBudget({ prompt, systemInstruction, respon
     const rawText = extractResponseText(response);
 
     // Debug: log what we got from the API (only first 500 chars to keep logs manageable)
-    console.log('[Gemma3 JSON] Response text type:', typeof response.text);
-    console.log('[Gemma3 JSON] Extracted text preview:', rawText ? rawText.substring(0, 500) : 'NULL/EMPTY');
-    console.log('[Gemma3 JSON] Response keys:', Object.keys(response));
+    console.log('[Gemma4 JSON] Response text type:', typeof response.text);
+    console.log('[Gemma4 JSON] Extracted text preview:', rawText ? rawText.substring(0, 500) : 'NULL/EMPTY');
+    console.log('[Gemma4 JSON] Response keys:', Object.keys(response));
     if (response.candidates) {
-        console.log('[Gemma3 JSON] Candidates count:', response.candidates.length);
+        console.log('[Gemma4 JSON] Candidates count:', response.candidates.length);
         if (response.candidates[0]) {
-            console.log('[Gemma3 JSON] Candidate finish reason:', response.candidates[0].finishReason);
+            console.log('[Gemma4 JSON] Candidate finish reason:', response.candidates[0].finishReason);
         }
     }
 
     if (!rawText) {
         // Log the full response structure to help debug
-        console.error('[Gemma3 JSON] Full response (stringified):', JSON.stringify(response, null, 2).substring(0, 2000));
+        console.error('[Gemma4 JSON] Full response (stringified):', JSON.stringify(response, null, 2).substring(0, 2000));
         throw new Error(
-            'Gemma 3 returned empty response. This can happen due to content filtering or rate limits. Please try again.'
+            'Gemma 4 returned empty response. This can happen due to content filtering or rate limits. Please try again.'
         );
     }
 
     const parsed = parseJSONRobust(rawText);
 
     if (parsed === null) {
-        console.error('[Gemma3 JSON] Failed to parse. Raw text:', rawText.substring(0, 1000));
+        console.error('[Gemma4 JSON] Failed to parse. Raw text:', rawText.substring(0, 1000));
         throw new Error(
             'Failed to parse AI response as JSON. Raw response starts with: ' +
             rawText.substring(0, 200)

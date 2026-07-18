@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { BookOpen, ChevronRight, AlertCircle, RefreshCw } from 'lucide-react';
+import LoadingExperience from './LoadingExperience';
 
 const LEVEL_META = {
   1: { name: 'Beginner', icon: '🌱', color: 'text-green-400', badge: 'badge-easy', tagBg: 'rgba(16,185,129,0.1)', tagColor: '#10b981' },
@@ -107,39 +108,7 @@ export default function TheoryScreen({ topic, level, onDone }) {
           </div>
 
           {loading && (
-            <div className="flex-1 overflow-hidden flex flex-col">
-              <div className="flex items-center gap-3 mb-4 shrink-0">
-                <div className="pulse-dot" />
-                <span className="text-slate-400 text-sm font-code">Generating theory...</span>
-              </div>
-              <div className="space-y-3 flex-1">
-                {/* Heading shimmer */}
-                <div className="shimmer h-6 rounded" style={{ width: '55%', opacity: 0.7 }} />
-                <div className="h-1" />
-                {/* Paragraph 1 */}
-                {[100, 85, 92, 70, 88, 60, 75].map((w, i) => (
-                  <div key={`a${i}`} className="shimmer h-4 rounded" style={{ width: `${w}%`, opacity: 0.6 }} />
-                ))}
-
-                <div className="h-2" />
-                {/* Heading 2 */}
-                <div className="shimmer h-6 rounded" style={{ width: '45%', opacity: 0.7 }} />
-                <div className="h-1" />
-                {/* Paragraph 2 */}
-                {[95, 78, 88, 65, 90, 72].map((w, i) => (
-                  <div key={`b${i}`} className="shimmer h-4 rounded" style={{ width: `${w}%`, opacity: 0.6 }} />
-                ))}
-
-                <div className="h-2" />
-                {/* Code block shimmer */}
-                <div className="shimmer h-24 rounded-lg" style={{ width: '80%', opacity: 0.4 }} />
-                <div className="h-2" />
-                {/* Paragraph 3 */}
-                {[88, 94, 72, 80, 68].map((w, i) => (
-                  <div key={`c${i}`} className="shimmer h-4 rounded" style={{ width: `${w}%`, opacity: 0.6 }} />
-                ))}
-              </div>
-            </div>
+            <LoadingExperience topic={topic} type="theory" />
           )}
 
           {error && (
